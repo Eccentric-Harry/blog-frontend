@@ -34,18 +34,16 @@ export const api = {
             method: "POST",
             body: JSON.stringify(payload)
         }),
-    uploadImage : (postId: number, file: File) => {
+    uploadImage : async (postId: number, file: File) => {
         const formData = new FormData();
         formData.append("file", file);
-        return fetch(`{API_BASE_URL}/api/posts/${postId}/images`, {
+        const response = await fetch(`{API_BASE_URL}/api/posts/${postId}/images`, {
             method: "POST",
             body: formData,
-        })
-        .then(async (response) => {
-            if(!response.ok){
-                throw new Error(await response.text());
-            }
-            return response.json();
-        })
+        });
+        if (!response.ok) {
+            throw new Error(await response.text());
+        }
+        return await response.json();
     }
 }

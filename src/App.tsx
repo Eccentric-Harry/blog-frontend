@@ -1,35 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import { api,  type PostSummary } from "./api";
+import "tailwindcss/tailwind.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [health, setHealth] = useState<string | null>(null);
+  const [posts, setPosts] = useState<PostSummary[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+
+  useEffect(() => {
+    api.getHealth()
+      .then(h => setHealth(h.status))
+      .catch(e => setHealth("unreachable: " + e.message));
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    api.getPosts().then(res => {
+      setPosts(res.content || []);
+      setLoading(false);
+    }).catch(e => { setErr(String(e)); setLoading(false); });
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div style={{ padding: 24, fontFamily: "system-ui, sans-serif" }}>
+      <h1>Blog frontend / API test</h1>
+      <p>Backend health: <strong>{health ?? "loading..."}</strong></p>
+
+      <h2>Posts</h2>
+      {loading ? <p>Loading...</p> : null}
+      {err ? <p style={{color:"red"}}>{err}</p> : null}
+      <ul>
+        {posts.map(p => (
+          <li key={p.id}>
+            <strong>{p.title}</strong> <br />
+            <small>{p.excerpt ?? ""}</small>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
-export default App
+export default App;
