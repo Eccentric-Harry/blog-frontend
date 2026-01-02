@@ -1,45 +1,128 @@
-import { useEffect, useState } from "react";
-import { api,  type PostSummary } from "./api";
-import "tailwindcss/tailwind.css";
+import { Navigate, Route, Routes } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Toaster } from 'react-hot-toast'
+import { PostListPage } from './routes/PostListPage'
+import { PostDetailPage } from './routes/PostDetailPage'
+import { PostFormPage } from './routes/PostFormPage'
+import { LoginPage } from './routes/LoginPage'
+import { MainLayout } from './components/layout/MainLayout'
+import { AuthProvider, useAuth } from './contexts/AuthContext'
 
-function App() {
-  const [health, setHealth] = useState<string | null>(null);
-  const [posts, setPosts] = useState<PostSummary[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      retry: 1,
+    },
+  },
+})
 
-  useEffect(() => {
-    api.getHealth()
-      .then(h => setHealth(h.status))
-      .catch(e => setHealth("unreachable: " + e.message));
-  }, []);
+/**
+ * Placeholder pages for nav links
+ */
+const CategoriesPage = () => (
+  <div>
+    <h1 className="text-3xl font-bold mb-4">Categories</h1>
+    <p className="text-gray-600 dark:text-gray-400">
+      Browse posts by category.
+    </p>
+  </div>
+)
 
-  useEffect(() => {
-    setLoading(true);
-    api.getPosts().then(res => {
-      setPosts(res.content || []);
-      setLoading(false);
-    }).catch(e => { setErr(String(e)); setLoading(false); });
-  }, []);
+const TagsPage = () => (
+  <div>
+    <h1 className="text-3xl font-bold mb-4">Tags</h1>
+    <p className="text-gray-600 dark:text-gray-400">Browse posts by tag.</p>
+  </div>
+)
 
-  return (
-    <div style={{ padding: 24, fontFamily: "system-ui, sans-serif" }}>
-      <h1>Blog frontend / API test</h1>
-      <p>Backend health: <strong>{health ?? "loading..."}</strong></p>
+const ArchivesPage = () => (
+  <div>
+    <h1 className="text-3xl font-bold mb-4">Archives</h1>
+    <p className="text-gray-600 dark:text-gray-400">Browse posts by date.</p>
+  </div>
+)
 
-      <h2>Posts</h2>
-      {loading ? <p>Loading...</p> : null}
-      {err ? <p style={{color:"red"}}>{err}</p> : null}
-      <ul>
-        {posts.map(p => (
-          <li key={p.id}>
-            <strong>{p.title}</strong> <br />
-            <small>{p.excerpt ?? ""}</small>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+const AboutPage = () => (
+  <div>
+    <h1 className="text-3xl font-bold mb-4">About</h1>
+    <p className="text-gray-600 dark:text-gray-400">
+      Welcome to my personal blog.
+    </p>
+  </div>
+)
+
+/**
+ * Protected route that requires admin role
+ */
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAdmin, isLoading, isAuthenticated } = useAuth()
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+      </div>
+    )
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />
+  }
+
+  if (!isAdmin) {
+    return <Navigate to="/" replace />
+  }
+
+  return <>{children}</>
 }
 
-export default App;
+function AppContent() {
+  return (
+    <MainLayout>
+      <Routes>
+        <Route path="/" element={<PostListPage />} />
+        <Route path="/posts/:id" element={<PostDetailPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/create"
+          element={
+            <AdminRoute>
+              <PostFormPage mode="create" />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/edit/:id"
+          element={
+            <AdminRoute>
+              <PostFormPage mode="edit" />
+            </AdminRoute>
+          }
+        />
+        <Route path="/categories" element={<CategoriesPage />} />
+        <Route path="/tags" element={<TagsPage />} />
+        <Route path="/archives" element={<ArchivesPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </MainLayout>
+  )
+}
+
+export default function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <AppContent />
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            className: 'dark:bg-gray-800 dark:text-white',
+            duration: 4000,
+          }}
+        />
+      </AuthProvider>
+    </QueryClientProvider>
+  )
+}

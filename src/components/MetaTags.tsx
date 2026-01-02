@@ -1,0 +1,70 @@
+import { useEffect } from 'react'
+
+type MetaTagsProps = {
+  title?: string
+  description?: string
+  imageUrl?: string
+  url?: string
+}
+
+export const MetaTags = ({
+  title,
+  description,
+  imageUrl,
+  url,
+}: MetaTagsProps) => {
+  useEffect(() => {
+    // Update document title
+    if (title) {
+      document.title = `${title} | My Blog`
+    }
+
+    // Update meta tags
+    const metaTags = [
+      {
+        name: 'description',
+        content: description || 'A personal blog about technology and ideas',
+      },
+      { property: 'og:title', content: title || 'My Blog' },
+      {
+        property: 'og:description',
+        content: description || 'A personal blog about technology and ideas',
+      },
+      { property: 'og:image', content: imageUrl || '/og-image.jpg' },
+      { property: 'og:url', content: url || window.location.href },
+      { property: 'og:type', content: 'article' },
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:title', content: title || 'My Blog' },
+      {
+        name: 'twitter:description',
+        content: description || 'A personal blog about technology and ideas',
+      },
+      { name: 'twitter:image', content: imageUrl || '/og-image.jpg' },
+    ]
+
+    metaTags.forEach(({ name, property, content }) => {
+      const selector = name
+        ? `meta[name="${name}"]`
+        : `meta[property="${property}"]`
+      let element = document.querySelector(selector)
+
+      if (!element) {
+        element = document.createElement('meta')
+        if (name) element.setAttribute('name', name)
+        if (property) element.setAttribute('property', property)
+        document.head.appendChild(element)
+      }
+
+      element.setAttribute('content', content)
+    })
+
+    // Cleanup
+    return () => {
+      if (!title) {
+        document.title = 'My Blog'
+      }
+    }
+  }, [title, description, imageUrl, url])
+
+  return null
+}
