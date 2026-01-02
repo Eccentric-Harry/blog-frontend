@@ -4,7 +4,14 @@ import { api } from '../api'
 import { format } from 'date-fns'
 import { MetaTags } from '../components/MetaTags'
 import Icon from '@mdi/react'
-import { mdiArrowLeft, mdiPencil, mdiDelete, mdiLoading } from '@mdi/js'
+import {
+  mdiArrowLeft,
+  mdiPencil,
+  mdiDelete,
+  mdiLoading,
+  mdiArchive,
+  mdiArchiveArrowUp,
+} from '@mdi/js'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import DOMPurify from 'dompurify'
@@ -15,6 +22,7 @@ export const PostDetailPage = () => {
   const navigate = useNavigate()
   const { isAdmin } = useAuth()
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isArchiving, setIsArchiving] = useState(false)
 
   const {
     data: post,
@@ -44,6 +52,36 @@ export const PostDetailPage = () => {
     } catch (err) {
       toast.error('Failed to delete post')
       setIsDeleting(false)
+    }
+  }
+
+  const handleArchive = async () => {
+    if (!post || !confirm('Are you sure you want to archive this post?')) {
+      return
+    }
+
+    setIsArchiving(true)
+    try {
+      await api.archivePost(post.id)
+      toast.success('Post archived successfully')
+      navigate('/archives')
+    } catch (err) {
+      toast.error('Failed to archive post')
+      setIsArchiving(false)
+    }
+  }
+
+  const handleUnarchive = async () => {
+    if (!post) return
+
+    setIsArchiving(true)
+    try {
+      await api.unarchivePost(post.id)
+      toast.success('Post unarchived successfully')
+      navigate('/')
+    } catch (err) {
+      toast.error('Failed to unarchive post')
+      setIsArchiving(false)
     }
   }
 
@@ -115,6 +153,35 @@ export const PostDetailPage = () => {
                 <Icon path={mdiPencil} size={0.7} />
                 Edit
               </Link>
+              {post.archived ? (
+                <button
+                  type="button"
+                  onClick={handleUnarchive}
+                  disabled={isArchiving}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-900/50 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  <Icon
+                    path={isArchiving ? mdiLoading : mdiArchiveArrowUp}
+                    size={0.7}
+                    className={isArchiving ? 'animate-spin' : ''}
+                  />
+                  {isArchiving ? 'Unarchiving...' : 'Unarchive'}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleArchive}
+                  disabled={isArchiving}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-900/50 rounded-lg transition-colors disabled:opacity-50"
+                >
+                  <Icon
+                    path={isArchiving ? mdiLoading : mdiArchive}
+                    size={0.7}
+                    className={isArchiving ? 'animate-spin' : ''}
+                  />
+                  {isArchiving ? 'Archiving...' : 'Archive'}
+                </button>
+              )}
               <button
                 type="button"
                 onClick={handleDelete}

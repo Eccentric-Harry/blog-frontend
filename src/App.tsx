@@ -5,6 +5,9 @@ import { PostListPage } from './routes/PostListPage'
 import { PostDetailPage } from './routes/PostDetailPage'
 import { PostFormPage } from './routes/PostFormPage'
 import { LoginPage } from './routes/LoginPage'
+import { CategoriesPage } from './routes/CategoriesPage'
+import { TagsPage } from './routes/TagsPage'
+import { ArchivesPage } from './routes/ArchivesPage'
 import { MainLayout } from './components/layout/MainLayout'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 
@@ -18,30 +21,8 @@ const queryClient = new QueryClient({
 })
 
 /**
- * Placeholder pages for nav links
+ * About page placeholder
  */
-const CategoriesPage = () => (
-  <div>
-    <h1 className="text-3xl font-bold mb-4">Categories</h1>
-    <p className="text-gray-600 dark:text-gray-400">
-      Browse posts by category.
-    </p>
-  </div>
-)
-
-const TagsPage = () => (
-  <div>
-    <h1 className="text-3xl font-bold mb-4">Tags</h1>
-    <p className="text-gray-600 dark:text-gray-400">Browse posts by tag.</p>
-  </div>
-)
-
-const ArchivesPage = () => (
-  <div>
-    <h1 className="text-3xl font-bold mb-4">Archives</h1>
-    <p className="text-gray-600 dark:text-gray-400">Browse posts by date.</p>
-  </div>
-)
 
 const AboutPage = () => (
   <div>
