@@ -2,11 +2,17 @@
 import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
 import Icon from '@mdi/react'
-import { mdiCalendarOutline, mdiFolderOutline, mdiClockOutline } from '@mdi/js'
+import {
+  mdiCalendarOutline,
+  mdiFolderOutline,
+  mdiClockOutline,
+  mdiArchive,
+} from '@mdi/js'
 import type { PostSummary } from '../api'
 
 type PostCardProps = {
   post: PostSummary
+  showArchivedBadge?: boolean
 }
 
 /**
@@ -15,7 +21,10 @@ type PostCardProps = {
  * - Left area: title, excerpt, metadata (date, category)
  * - Right area: thumbnail image
  */
-export const PostCard = ({ post }: PostCardProps) => {
+export const PostCard = ({
+  post,
+  showArchivedBadge = false,
+}: PostCardProps) => {
   // Generate ImageKit thumbnail transform URL if coverImageUrl exists
   const thumbnailUrl = post.coverImageUrl
     ? post.coverImageUrl.includes('ik.imagekit.io')
@@ -23,14 +32,27 @@ export const PostCard = ({ post }: PostCardProps) => {
       : post.coverImageUrl
     : null
 
+  const isArchived = showArchivedBadge && post.archived
+
   return (
-    <article className="group bg-white dark:bg-[#1e1e1e] rounded-xl shadow-sm hover:shadow-lg border border-gray-100 dark:border-[#2d2d2d] transition-all duration-300 overflow-hidden">
+    <article className="group relative bg-white dark:bg-[#1e1e1e] rounded-xl shadow-sm hover:shadow-lg border border-gray-100 dark:border-[#2d2d2d] transition-all duration-300 overflow-hidden">
+      {/* Archived Badge */}
+      {isArchived && (
+        <div className="absolute left-4 top-4 z-10">
+          <div className="bg-amber-500 text-white text-xs px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm">
+            <Icon path={mdiArchive} size={0.5} />
+            <span>Archived</span>
+          </div>
+        </div>
+      )}
       <Link
         to={`/posts/${post.id}`}
         className="flex flex-col sm:flex-row min-h-[180px]"
       >
         {/* Text Content - Left Side */}
-        <div className="flex-1 p-5 sm:p-6 flex flex-col order-2 sm:order-1">
+        <div
+          className={`flex-1 p-5 sm:p-6 flex flex-col order-2 sm:order-1 ${isArchived ? 'pt-12 sm:pt-12' : ''}`}
+        >
           {/* Title */}
           <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-3">
             {post.title}

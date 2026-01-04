@@ -91,15 +91,11 @@ export const ArchivesPage = () => {
         /* Post List */
         <div className="space-y-6">
           {posts.map((post) => (
-            <div key={post.id} className="relative">
-              <div className="absolute -left-3 top-4 z-10">
-                <div className="bg-amber-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
-                  <Icon path={mdiArchive} size={0.5} />
-                  Archived
-                </div>
-              </div>
-              <PostCard post={post} />
-            </div>
+            <PostCard
+              key={post.id}
+              post={{ ...post, archived: true }}
+              showArchivedBadge={true}
+            />
           ))}
         </div>
       )}

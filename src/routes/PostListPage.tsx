@@ -122,7 +122,11 @@ export const PostListPage = () => {
         /* Post List */
         <div className="space-y-6">
           {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <PostCard
+              key={post.id}
+              post={post}
+              showArchivedBadge={!!tag || !!category}
+            />
           ))}
         </div>
       )}
