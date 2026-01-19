@@ -67,7 +67,7 @@ const AboutPage = () => (
           Hey, I'm Harry! 👋
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-400">
-          Software Developer & Tech Enthusiast
+          Aspiring Software Developer | System Design Enthusiast
         </p>
       </div>
     </div>
@@ -78,19 +78,27 @@ const AboutPage = () => (
         About Me
       </h2>
       <p className="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
-        Welcome to my corner of the internet! I'm a passionate software
-        developer who loves building things and sharing knowledge. This blog is
-        where I document my journey, share tutorials, and write about topics
-        that interest me in the world of technology.
+        Welcome to my corner of the internet! I'm just getting started in the
+        tech world, and I'm absolutely loving the journey. This blog is where I
+        document everything I learn, share my experiences, and write about
+        topics that fascinate me.
       </p>
       <p className="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
-        When I'm not coding, you can find me exploring new technologies,
-        contributing to open source projects, or writing about my experiences in
-        tech.
+        I'm deeply fascinated by system design and how systems scale to handle
+        millions of users. There's something magical about understanding how
+        large-scale distributed systems work under the hood — from databases and
+        caching to load balancing and microservices. I spend a lot of my time
+        diving into these concepts and building projects to apply what I learn.
+      </p>
+      <p className="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
+        When I'm not coding, you can find me reading engineering blogs,
+        exploring new technologies, or geeking out over architecture diagrams. I
+        believe in learning in public, so expect to see my wins, struggles, and
+        everything in between documented here.
       </p>
       <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
-        Feel free to reach out if you want to collaborate, have questions, or
-        just want to chat!
+        Feel free to reach out if you want to collaborate, discuss tech, or just
+        want to chat!
       </p>
     </div>
 
