@@ -51,11 +51,11 @@ export const ArchivesPage = () => {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <div className="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-[#252525] border border-gray-200 dark:border-[#333] flex items-center justify-center">
             <Icon
               path={mdiArchive}
-              size={1}
-              className="text-amber-600 dark:text-amber-400"
+              size={0.9}
+              className="text-gray-600 dark:text-gray-400"
             />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">

@@ -1,40 +1,36 @@
 // frontend: src/components/layout/LeftSidebar.tsx
 import { Link, useLocation } from 'react-router-dom'
-import Icon from '@mdi/react'
 import {
-  mdiHome,
-  mdiTagMultiple,
-  mdiFolderMultiple,
-  mdiArchive,
-  mdiInformationOutline,
-  mdiGithub,
-  mdiLinkedin,
-  mdiWeatherNight,
-  mdiWeatherSunny,
-  mdiPencil,
-} from '@mdi/js'
-import { BsTwitterX } from 'react-icons/bs'
+  HiOutlineHome,
+  HiOutlineTag,
+  HiOutlineFolder,
+  HiOutlineArchiveBox,
+  HiOutlineInformationCircle,
+  HiOutlinePencilSquare,
+  HiOutlineMoon,
+  HiOutlineSun,
+} from 'react-icons/hi2'
+import { BsTwitterX, BsGithub, BsLinkedin } from 'react-icons/bs'
 import profileImage from '../../assets/profile.jpg'
 
 type NavItem = {
   label: string
   path: string
-  icon: string
+  icon: React.ComponentType<{ size?: number; className?: string }>
 }
 
 const navItems: NavItem[] = [
-  { label: 'Home', path: '/', icon: mdiHome },
-  { label: 'Categories', path: '/categories', icon: mdiFolderMultiple },
-  { label: 'Tags', path: '/tags', icon: mdiTagMultiple },
-  { label: 'Archives', path: '/archives', icon: mdiArchive },
-  { label: 'About', path: '/about', icon: mdiInformationOutline },
+  { label: 'Home', path: '/', icon: HiOutlineHome },
+  { label: 'Categories', path: '/categories', icon: HiOutlineFolder },
+  { label: 'Tags', path: '/tags', icon: HiOutlineTag },
+  { label: 'Archives', path: '/archives', icon: HiOutlineArchiveBox },
+  { label: 'About', path: '/about', icon: HiOutlineInformationCircle },
 ]
 
 type SocialLink = {
   label: string
   url: string
-  icon: string | React.ComponentType<{ className?: string; size?: number }>
-  iconType?: 'mdi' | 'react-icon'
+  icon: React.ComponentType<{ size?: number; className?: string }>
 }
 
 const socialLinks: SocialLink[] = [
@@ -42,19 +38,16 @@ const socialLinks: SocialLink[] = [
     label: 'X',
     url: 'https://x.com',
     icon: BsTwitterX,
-    iconType: 'react-icon',
   },
   {
     label: 'GitHub',
     url: 'https://github.com',
-    icon: mdiGithub,
-    iconType: 'mdi',
+    icon: BsGithub,
   },
   {
     label: 'LinkedIn',
     url: 'https://linkedin.com',
-    icon: mdiLinkedin,
-    iconType: 'mdi',
+    icon: BsLinkedin,
   },
 ]
 
@@ -101,6 +94,7 @@ export const LeftSidebar = ({
         <ul className="space-y-1">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path
+            const IconComponent = item.icon
             return (
               <li key={item.path}>
                 <Link
@@ -111,7 +105,7 @@ export const LeftSidebar = ({
                       : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1e1e1e]'
                   }`}
                 >
-                  <Icon path={item.icon} size={0.9} />
+                  <IconComponent size={20} />
                   <span>{item.label}</span>
                 </Link>
               </li>
@@ -128,17 +122,14 @@ export const LeftSidebar = ({
             to="/create"
             className="flex items-center justify-center gap-2 w-full px-4 py-2.5 mb-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm"
           >
-            <Icon path={mdiPencil} size={0.8} />
+            <HiOutlinePencilSquare size={18} />
             Write New Post
           </Link>
         )}
 
         <div className="flex items-center justify-center gap-2 flex-wrap">
           {socialLinks.map((link) => {
-            const IconComponent =
-              link.iconType === 'react-icon'
-                ? (link.icon as React.ComponentType<{ size?: number }>)
-                : null
+            const IconComponent = link.icon
             return (
               <a
                 key={link.label}
@@ -152,11 +143,7 @@ export const LeftSidebar = ({
                 className="p-2.5 rounded-full bg-gray-100 dark:bg-[#1e1e1e] text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-[#2d2d2d] hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
                 title={link.label}
               >
-                {link.iconType === 'react-icon' && IconComponent ? (
-                  <IconComponent size={20} />
-                ) : (
-                  <Icon path={link.icon as string} size={0.85} />
-                )}
+                <IconComponent size={20} />
               </a>
             )
           })}
@@ -169,10 +156,11 @@ export const LeftSidebar = ({
             onClick={onToggleDarkMode}
             className="flex items-center justify-center gap-2 w-full mt-4 px-4 py-2 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-[#1e1e1e] transition-colors text-gray-600 dark:text-gray-400"
           >
-            <Icon
-              path={darkMode ? mdiWeatherSunny : mdiWeatherNight}
-              size={0.8}
-            />
+            {darkMode ? (
+              <HiOutlineSun size={18} />
+            ) : (
+              <HiOutlineMoon size={18} />
+            )}
             {darkMode ? 'Light Mode' : 'Dark Mode'}
           </button>
         )}

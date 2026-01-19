@@ -1,19 +1,19 @@
 // frontend: src/components/layout/MobileNav.tsx
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import Icon from '@mdi/react'
 import {
-  mdiMenu,
-  mdiClose,
-  mdiHome,
-  mdiTagMultiple,
-  mdiFolderMultiple,
-  mdiArchive,
-  mdiInformationOutline,
-  mdiPencil,
-  mdiWeatherNight,
-  mdiWeatherSunny,
-} from '@mdi/js'
+  HiOutlineBars3,
+  HiOutlineXMark,
+  HiOutlineHome,
+  HiOutlineTag,
+  HiOutlineFolder,
+  HiOutlineArchiveBox,
+  HiOutlineInformationCircle,
+  HiOutlinePencilSquare,
+  HiOutlineMoon,
+  HiOutlineSun,
+} from 'react-icons/hi2'
+import profileImage from '../../assets/profile.jpg'
 
 type MobileNavProps = {
   blogTitle?: string
@@ -24,16 +24,16 @@ type MobileNavProps = {
 }
 
 const navItems = [
-  { label: 'Home', path: '/', icon: mdiHome },
-  { label: 'Categories', path: '/categories', icon: mdiFolderMultiple },
-  { label: 'Tags', path: '/tags', icon: mdiTagMultiple },
-  { label: 'Archives', path: '/archives', icon: mdiArchive },
-  { label: 'About', path: '/about', icon: mdiInformationOutline },
+  { label: 'Home', path: '/', icon: HiOutlineHome },
+  { label: 'Categories', path: '/categories', icon: HiOutlineFolder },
+  { label: 'Tags', path: '/tags', icon: HiOutlineTag },
+  { label: 'Archives', path: '/archives', icon: HiOutlineArchiveBox },
+  { label: 'About', path: '/about', icon: HiOutlineInformationCircle },
 ]
 
 export const MobileNav = ({
   blogTitle = 'My Blog',
-  avatarUrl = 'https://api.dicebear.com/7.x/avataaars/svg?seed=blog',
+  avatarUrl = profileImage,
   darkMode,
   onToggleDarkMode,
   isAdmin = false,
@@ -46,16 +46,16 @@ export const MobileNav = ({
   return (
     <>
       {/* Mobile Header */}
-      <header className="lg:hidden sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm">
+      <header className="lg:hidden sticky top-0 z-50 border-b border-gray-200 dark:border-[#2d2d2d] bg-gray-50/95 dark:bg-[#121212]/95 backdrop-blur-sm">
         <div className="flex items-center justify-between px-4 h-14">
           {/* Menu Button */}
           <button
             type="button"
             onClick={() => setIsOpen(true)}
-            className="p-2 -ml-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+            className="p-2 -ml-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#1e1e1e]"
             aria-label="Open menu"
           >
-            <Icon path={mdiMenu} size={1} />
+            <HiOutlineBars3 size={24} />
           </button>
 
           {/* Title */}
@@ -68,23 +68,24 @@ export const MobileNav = ({
             <button
               type="button"
               onClick={onToggleDarkMode}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#1e1e1e]"
               aria-label={
                 darkMode ? 'Switch to light mode' : 'Switch to dark mode'
               }
             >
-              <Icon
-                path={darkMode ? mdiWeatherSunny : mdiWeatherNight}
-                size={0.9}
-              />
+              {darkMode ? (
+                <HiOutlineSun size={20} />
+              ) : (
+                <HiOutlineMoon size={20} />
+              )}
             </button>
             {isAdmin && (
               <Link
                 to="/create"
-                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-blue-600 dark:text-blue-400"
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#1e1e1e] text-blue-600 dark:text-blue-400"
                 aria-label="Write new post"
               >
-                <Icon path={mdiPencil} size={0.9} />
+                <HiOutlinePencilSquare size={20} />
               </Link>
             )}
           </div>
@@ -101,32 +102,34 @@ export const MobileNav = ({
           />
 
           {/* Drawer */}
-          <div className="lg:hidden fixed inset-y-0 left-0 w-72 bg-white dark:bg-gray-900 z-50 shadow-xl overflow-y-auto">
+          <div className="lg:hidden fixed inset-y-0 left-0 w-72 bg-gray-50 dark:bg-[#121212] z-50 shadow-xl overflow-y-auto">
             {/* Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
+            <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-[#2d2d2d]">
               <div className="flex items-center gap-3">
-                <img
-                  src={avatarUrl}
-                  alt={blogTitle}
-                  className="w-10 h-10 rounded-full"
-                />
+                <div className="w-10 h-10 rounded-full overflow-hidden ring-2 ring-white dark:ring-[#1e1e1e] shadow-md">
+                  <img
+                    src={avatarUrl}
+                    alt={blogTitle}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <span className="font-bold">{blogTitle}</span>
               </div>
               <button
                 type="button"
                 onClick={closeMenu}
-                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-[#1e1e1e]"
                 aria-label="Close menu"
               >
-                <Icon path={mdiClose} size={1} />
+                <HiOutlineXMark size={24} />
               </button>
             </div>
 
-            {/* Nav Items */}
             <nav className="p-4">
               <ul className="space-y-1">
                 {navItems.map((item) => {
                   const isActive = location.pathname === item.path
+                  const IconComponent = item.icon
                   return (
                     <li key={item.path}>
                       <Link
@@ -134,11 +137,11 @@ export const MobileNav = ({
                         onClick={closeMenu}
                         className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                           isActive
-                            ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 font-medium'
-                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                            ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 font-medium'
+                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1e1e1e]'
                         }`}
                       >
-                        <Icon path={item.icon} size={1} />
+                        <IconComponent size={22} />
                         <span>{item.label}</span>
                       </Link>
                     </li>
@@ -149,13 +152,13 @@ export const MobileNav = ({
 
             {/* Admin Section */}
             {isAdmin && (
-              <div className="p-4 border-t border-gray-200 dark:border-gray-800">
+              <div className="p-4 border-t border-gray-200 dark:border-[#2d2d2d]">
                 <Link
                   to="/create"
                   onClick={closeMenu}
                   className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
                 >
-                  <Icon path={mdiPencil} size={0.9} />
+                  <HiOutlinePencilSquare size={18} />
                   Write New Post
                 </Link>
               </div>
