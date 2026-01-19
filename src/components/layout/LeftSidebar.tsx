@@ -10,7 +10,7 @@ import {
   HiOutlineMoon,
   HiOutlineSun,
 } from 'react-icons/hi2'
-import { BsTwitterX, BsGithub, BsLinkedin } from 'react-icons/bs'
+import { BsTwitterX, BsGithub, BsLinkedin, BsMedium } from 'react-icons/bs'
 import profileImage from '../../assets/profile.jpg'
 
 type NavItem = {
@@ -36,18 +36,23 @@ type SocialLink = {
 const socialLinks: SocialLink[] = [
   {
     label: 'X',
-    url: 'https://x.com',
+    url: 'https://x.com/harrrybuilds',
     icon: BsTwitterX,
   },
   {
     label: 'GitHub',
-    url: 'https://github.com',
+    url: 'https://github.com/Eccentric-Harry',
     icon: BsGithub,
   },
   {
     label: 'LinkedIn',
-    url: 'https://linkedin.com',
+    url: 'https://www.linkedin.com/in/h-harinadh/',
     icon: BsLinkedin,
+  },
+  {
+    label: 'Medium',
+    url: 'https://eccentricharry.medium.com',
+    icon: BsMedium,
   },
 ]
 
