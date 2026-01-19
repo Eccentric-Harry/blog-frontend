@@ -67,7 +67,7 @@ const AboutPage = () => (
           Hey, I'm Harry! 👋
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-400">
-          Aspiring Software Developer | System Design Enthusiast
+          Software Developer | System Design Enthusiast
         </p>
       </div>
     </div>
@@ -86,7 +86,7 @@ const AboutPage = () => (
       <p className="text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
         I'm deeply fascinated by system design and how systems scale to handle
         millions of users. There's something magical about understanding how
-        large-scale distributed systems work under the hood — from databases and
+        large-scale distributed systems work under the hood, from databases and
         caching to load balancing and microservices. I spend a lot of my time
         diving into these concepts and building projects to apply what I learn.
       </p>
