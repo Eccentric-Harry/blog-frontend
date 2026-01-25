@@ -14,6 +14,7 @@ import {
   HiOutlineSun,
 } from 'react-icons/hi2'
 import profileImage from '../../assets/profile.jpg'
+import { VisitorCounter } from '../VisitorCounter'
 
 type MobileNavProps = {
   blogTitle?: string
@@ -113,7 +114,10 @@ export const MobileNav = ({
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <span className="font-bold">{blogTitle}</span>
+                <div className="flex flex-col">
+                  <span className="font-bold">{blogTitle}</span>
+                  <VisitorCounter className="mt-1" />
+                </div>
               </div>
               <button
                 type="button"

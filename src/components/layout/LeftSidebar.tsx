@@ -12,6 +12,7 @@ import {
 } from 'react-icons/hi2'
 import { BsTwitterX, BsGithub, BsLinkedin, BsMedium } from 'react-icons/bs'
 import profileImage from '../../assets/profile.jpg'
+import { VisitorCounter } from '../VisitorCounter'
 
 type NavItem = {
   label: string
@@ -92,6 +93,7 @@ export const LeftSidebar = ({
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
           {blogSubtitle}
         </p>
+        <VisitorCounter className="mt-3" />
       </div>
 
       {/* Navigation */}

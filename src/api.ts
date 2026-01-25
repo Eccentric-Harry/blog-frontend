@@ -78,6 +78,11 @@ export type ImageUploadResponse = {
   fileType: string
 }
 
+export type VisitorCountResponse = {
+  totalVisitors: number
+  lastUpdated: string
+}
+
 export type ApiError = {
   timestamp: string
   status: number
@@ -371,4 +376,19 @@ export const api = {
 
     return (await response.json()) as ImageUploadResponse
   },
+
+  // ============ Visitors ============
+
+  /**
+   * Get current visitor count
+   */
+  getVisitorCount: () => request<VisitorCountResponse>('/api/visitors'),
+
+  /**
+   * Track a visitor (increment count)
+   */
+  trackVisitor: () =>
+    request<VisitorCountResponse>('/api/visitors/track', {
+      method: 'POST',
+    }),
 }
