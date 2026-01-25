@@ -43,7 +43,7 @@ const socialLinks = [
     label: 'LinkedIn',
     url: 'https://www.linkedin.com/in/',
     icon: BsLinkedin,
-    username: 'h-harinadh',
+    username: 'Eccentric-Harry',
   },
   {
     label: 'Medium',
