@@ -1,111 +1,113 @@
 // frontend: src/components/PostCard.tsx
 import { Link } from 'react-router-dom'
-import { format } from 'date-fns'
+import { format, formatDistanceToNow, differenceInDays } from 'date-fns'
 import Icon from '@mdi/react'
-import {
-  mdiCalendarOutline,
-  mdiFolderOutline,
-  mdiClockOutline,
-  mdiArchive,
-} from '@mdi/js'
+import { mdiArchive } from '@mdi/js'
 import type { PostSummary } from '../api'
+import profileImage from '../assets/profile.jpg'
+
+// Pure function to format date - moved outside component
+const formatPostDate = (dateStr: string): string => {
+  const date = new Date(dateStr)
+  const daysDiff = differenceInDays(new Date(), date)
+  if (daysDiff < 7) {
+    return formatDistanceToNow(date, { addSuffix: false }) + ' ago'
+  }
+  return format(date, 'MMM d')
+}
 
 type PostCardProps = {
   post: PostSummary
   showArchivedBadge?: boolean
 }
 
-/**
- * PostCard component matching the design:
- * - White/pale rounded container with subtle shadow
- * - Left area: title, excerpt, metadata (date, category)
- * - Right area: thumbnail image
- */
 export const PostCard = ({
   post,
   showArchivedBadge = false,
 }: PostCardProps) => {
-  // Generate ImageKit thumbnail transform URL if coverImageUrl exists
   const thumbnailUrl = post.coverImageUrl
     ? post.coverImageUrl.includes('ik.imagekit.io')
-      ? `${post.coverImageUrl}?tr=w-400,h-280,fo-auto,q-80`
+      ? `${post.coverImageUrl}?tr=w-300,h-200,fo-auto,q-80`
       : post.coverImageUrl
     : null
 
   const isArchived = showArchivedBadge && post.archived
 
   return (
-    <article className="group relative bg-white dark:bg-[#1e1e1e] rounded-xl shadow-sm hover:shadow-lg border border-gray-100 dark:border-[#2d2d2d] transition-all duration-300 overflow-hidden">
-      {/* Archived Badge */}
-      {isArchived && (
-        <div className="absolute left-4 top-4 z-10">
-          <div className="bg-amber-500 text-white text-xs px-2.5 py-1 rounded-full flex items-center gap-1 shadow-sm">
-            <Icon path={mdiArchive} size={0.5} />
-            <span>Archived</span>
-          </div>
-        </div>
-      )}
-      <Link
-        to={`/posts/${post.id}`}
-        className="flex flex-col sm:flex-row min-h-[180px]"
-      >
-        {/* Text Content - Left Side */}
-        <div
-          className={`flex-1 p-5 sm:p-6 flex flex-col order-2 sm:order-1 ${isArchived ? 'pt-12 sm:pt-12' : ''}`}
-        >
+    <article className="group py-4 px-3 -mx-3 border-b border-gray-100 dark:border-neutral-800 last:border-b-0 rounded-lg hover:bg-gray-50 dark:hover:bg-neutral-800/50 transition-colors">
+      {/* Author Row */}
+      <div className="flex items-center gap-2 mb-2">
+        <img
+          src={profileImage}
+          alt={post.author || 'Author'}
+          className="w-5 h-5 rounded ring-1 ring-gray-200 dark:ring-neutral-700"
+        />
+        <span className="text-xs font-mono text-blue-600 dark:text-blue-400">
+          {post.author || 'harry'}
+        </span>
+        {isArchived && (
+          <span className="inline-flex items-center gap-1 text-[10px] font-mono text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded">
+            <Icon path={mdiArchive} size={0.4} />
+            archived
+          </span>
+        )}
+      </div>
+
+      {/* Content Row */}
+      <Link to={`/posts/${post.id}`} className="flex gap-4">
+        {/* Text Content */}
+        <div className="flex-1 min-w-0">
           {/* Title */}
-          <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2 mb-3">
+          <h2 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-gray-100 leading-snug mb-1 line-clamp-2 transition-colors font-serif">
             {post.title}
           </h2>
 
           {/* Excerpt */}
           {post.excerpt && (
-            <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed line-clamp-2 sm:line-clamp-3 mb-4 flex-grow">
+            <p
+              className={`text-gray-500 dark:text-gray-400 text-sm leading-relaxed line-clamp-2 mb-2 ${
+                thumbnailUrl ? 'hidden sm:block' : ''
+              }`}
+            >
               {post.excerpt}
             </p>
           )}
 
           {/* Metadata Row */}
-          <div className="flex items-center gap-4 text-xs text-gray-400 dark:text-gray-500 mt-auto">
-            {/* Date */}
+          <div className="flex items-center gap-2 text-[11px] font-mono text-gray-400 dark:text-gray-500">
             {post.createdAt && (
-              <div className="flex items-center gap-1.5">
-                <Icon path={mdiCalendarOutline} size={0.6} />
-                <time dateTime={post.createdAt}>
-                  {format(new Date(post.createdAt), 'MMM d, yyyy')}
-                </time>
-              </div>
+              <time dateTime={post.createdAt}>
+                {formatPostDate(post.createdAt)}
+              </time>
             )}
 
-            {/* Category */}
-            {post.categoryName && (
-              <div className="flex items-center gap-1.5">
-                <Icon path={mdiFolderOutline} size={0.6} />
-                <span>{post.categoryName}</span>
-              </div>
-            )}
-
-            {/* Read time */}
             {post.readTime && post.readTime > 0 && (
-              <div className="hidden sm:flex items-center gap-1.5">
-                <Icon path={mdiClockOutline} size={0.6} />
+              <>
+                <span>·</span>
                 <span>{post.readTime} min</span>
-              </div>
+              </>
+            )}
+
+            {post.categoryName && (
+              <>
+                <span>·</span>
+                <span className="px-1.5 py-0.5 bg-gray-100 dark:bg-neutral-800 text-gray-600 dark:text-gray-400 rounded">
+                  {post.categoryName}
+                </span>
+              </>
             )}
           </div>
         </div>
 
-        {/* Thumbnail - Right Side */}
+        {/* Thumbnail */}
         {thumbnailUrl && (
-          <div className="w-full sm:w-44 md:w-52 lg:w-60 flex-shrink-0 order-1 sm:order-2">
-            <div className="aspect-video sm:aspect-auto sm:h-full relative overflow-hidden bg-gray-100 dark:bg-[#2d2d2d]">
-              <img
-                src={thumbnailUrl}
-                alt=""
-                loading="lazy"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            </div>
+          <div className="flex-shrink-0 w-28 h-16 sm:w-32 sm:h-20 overflow-hidden rounded-lg">
+            <img
+              src={thumbnailUrl}
+              alt=""
+              loading="lazy"
+              className="w-full h-full object-cover"
+            />
           </div>
         )}
       </Link>
@@ -113,28 +115,23 @@ export const PostCard = ({
   )
 }
 
-/**
- * Skeleton loader for PostCard
- */
 export const PostCardSkeleton = () => (
-  <div className="bg-white dark:bg-[#1e1e1e] rounded-xl shadow-sm border border-gray-100 dark:border-[#2d2d2d] overflow-hidden animate-pulse">
-    <div className="flex flex-col sm:flex-row min-h-[180px]">
-      {/* Text Content Skeleton */}
-      <div className="flex-1 p-5 sm:p-6 order-2 sm:order-1">
-        <div className="h-6 bg-gray-200 dark:bg-[#2d2d2d] rounded w-3/4 mb-4" />
-        <div className="space-y-2 mb-4">
-          <div className="h-4 bg-gray-200 dark:bg-[#2d2d2d] rounded w-full" />
-          <div className="h-4 bg-gray-200 dark:bg-[#2d2d2d] rounded w-5/6" />
-        </div>
-        <div className="flex gap-4 mt-auto">
-          <div className="h-3 bg-gray-200 dark:bg-[#2d2d2d] rounded w-20" />
-          <div className="h-3 bg-gray-200 dark:bg-[#2d2d2d] rounded w-16" />
+  <div className="py-4 border-b border-gray-100 dark:border-neutral-800 animate-pulse">
+    <div className="flex items-center gap-2 mb-3">
+      <div className="w-5 h-5 rounded bg-gray-200 dark:bg-neutral-800" />
+      <div className="h-3 w-16 bg-gray-200 dark:bg-neutral-800 rounded" />
+    </div>
+    <div className="flex gap-4">
+      <div className="flex-1">
+        <div className="h-5 bg-gray-200 dark:bg-neutral-800 rounded w-4/5 mb-2" />
+        <div className="h-4 bg-gray-200 dark:bg-neutral-800 rounded w-3/5 mb-3" />
+        <div className="h-3 bg-gray-200 dark:bg-neutral-800 rounded w-full mb-2 hidden sm:block" />
+        <div className="flex gap-2">
+          <div className="h-3 w-10 bg-gray-200 dark:bg-neutral-800 rounded" />
+          <div className="h-3 w-12 bg-gray-200 dark:bg-neutral-800 rounded" />
         </div>
       </div>
-      {/* Thumbnail Skeleton */}
-      <div className="w-full sm:w-44 md:w-52 lg:w-60 flex-shrink-0 order-1 sm:order-2">
-        <div className="aspect-video sm:aspect-auto sm:h-full bg-gray-200 dark:bg-[#2d2d2d]" />
-      </div>
+      <div className="flex-shrink-0 w-28 h-16 sm:w-32 sm:h-20 bg-gray-200 dark:bg-neutral-800 rounded-lg" />
     </div>
   </div>
 )

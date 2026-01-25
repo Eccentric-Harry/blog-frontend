@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 
+const DEFAULT_TITLE = 'Harry'
+
 type MetaTagsProps = {
   title?: string
   description?: string
@@ -16,7 +18,7 @@ export const MetaTags = ({
   useEffect(() => {
     // Update document title
     if (title) {
-      document.title = `${title} | My Blog`
+      document.title = `${title} | ${DEFAULT_TITLE}`
     }
 
     // Update meta tags
@@ -25,7 +27,7 @@ export const MetaTags = ({
         name: 'description',
         content: description || 'A personal blog about technology and ideas',
       },
-      { property: 'og:title', content: title || 'My Blog' },
+      { property: 'og:title', content: title || DEFAULT_TITLE },
       {
         property: 'og:description',
         content: description || 'A personal blog about technology and ideas',
@@ -34,7 +36,7 @@ export const MetaTags = ({
       { property: 'og:url', content: url || window.location.href },
       { property: 'og:type', content: 'article' },
       { name: 'twitter:card', content: 'summary_large_image' },
-      { name: 'twitter:title', content: title || 'My Blog' },
+      { name: 'twitter:title', content: title || DEFAULT_TITLE },
       {
         name: 'twitter:description',
         content: description || 'A personal blog about technology and ideas',
@@ -58,11 +60,9 @@ export const MetaTags = ({
       element.setAttribute('content', content)
     })
 
-    // Cleanup
+    // Cleanup - reset title when component unmounts
     return () => {
-      if (!title) {
-        document.title = 'My Blog'
-      }
+      document.title = DEFAULT_TITLE
     }
   }, [title, description, imageUrl, url])
 

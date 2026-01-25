@@ -49,7 +49,7 @@ export const PostDetailPage = () => {
       await api.deletePost(post.id)
       toast.success('Post deleted successfully')
       navigate('/')
-    } catch (err) {
+    } catch {
       toast.error('Failed to delete post')
       setIsDeleting(false)
     }
@@ -65,7 +65,7 @@ export const PostDetailPage = () => {
       await api.archivePost(post.id)
       toast.success('Post archived successfully')
       navigate('/archives')
-    } catch (err) {
+    } catch {
       toast.error('Failed to archive post')
       setIsArchiving(false)
     }
@@ -79,7 +79,7 @@ export const PostDetailPage = () => {
       await api.unarchivePost(post.id)
       toast.success('Post unarchived successfully')
       navigate('/')
-    } catch (err) {
+    } catch {
       toast.error('Failed to unarchive post')
       setIsArchiving(false)
     }
@@ -136,7 +136,7 @@ export const PostDetailPage = () => {
 
       <article className="max-w-3xl mx-auto px-4 py-8">
         {/* Back button and actions */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-8">
           <Link
             to="/"
             className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
@@ -145,7 +145,7 @@ export const PostDetailPage = () => {
             Back
           </Link>
           {isAdmin && (
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <Link
                 to={`/edit/${post.id}`}
                 className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
@@ -204,23 +204,23 @@ export const PostDetailPage = () => {
           <div className="flex flex-wrap gap-2 mb-4">
             {post.tags.map((tag) => (
               <Link
-                key={typeof tag === 'string' ? tag : tag.id}
-                to={`/?tag=${typeof tag === 'string' ? tag : tag.slug || tag.name}`}
+                key={tag.id}
+                to={`/?tag=${tag.slug || tag.name}`}
                 className="text-sm px-3 py-1 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-full text-gray-600 dark:text-gray-400 transition-colors"
               >
-                {typeof tag === 'string' ? tag : tag.name}
+                {tag.name}
               </Link>
             ))}
           </div>
         )}
 
         {/* Title */}
-        <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 leading-tight">
           {post.title}
         </h1>
 
         {/* Meta */}
-        <div className="flex items-center gap-4 text-gray-600 dark:text-gray-400 mb-8 pb-8 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-gray-600 dark:text-gray-400 mb-8 pb-8 border-b border-gray-200 dark:border-gray-700">
           {post.author && <span className="font-medium">{post.author}</span>}
           {post.createdAt && (
             <time dateTime={post.createdAt}>
@@ -245,7 +245,7 @@ export const PostDetailPage = () => {
 
         {/* Content */}
         <div
-          className="prose prose-lg dark:prose-invert max-w-none prose-headings:font-bold prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-img:rounded-lg prose-img:shadow-lg prose-pre:bg-gray-100 dark:prose-pre:bg-gray-800 prose-code:text-pink-600 dark:prose-code:text-pink-400"
+          className="prose dark:prose-invert"
           dangerouslySetInnerHTML={{ __html: sanitizedContent }}
         />
 

@@ -28,10 +28,11 @@ export const LoginPage = () => {
 
     try {
       await login(formData.usernameOrEmail, formData.password)
-      toast.success('Welcome back!')
+      toast.success('Access granted!')
       navigate('/')
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Login failed'
+      const message =
+        error instanceof Error ? error.message : 'Authentication failed'
       toast.error(message)
     } finally {
       setIsLoading(false)
@@ -41,12 +42,22 @@ export const LoginPage = () => {
   return (
     <div className="min-h-[60vh] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <div className="bg-white dark:bg-[#151515] rounded-2xl shadow-lg border border-gray-100 dark:border-[#2a2a2a] p-8">
-          <h1 className="text-2xl font-bold text-center mb-2 text-gray-900 dark:text-gray-100">
-            Welcome Back
+        <div className="bg-white dark:bg-neutral-900 rounded-xl border border-gray-200 dark:border-neutral-800 p-8 shadow-sm">
+          {/* Terminal Header */}
+          <div className="flex items-center gap-2 mb-6 pb-4 border-b border-gray-100 dark:border-neutral-800">
+            <div className="w-3 h-3 rounded-full bg-red-400" />
+            <div className="w-3 h-3 rounded-full bg-yellow-400" />
+            <div className="w-3 h-3 rounded-full bg-green-400" />
+            <span className="ml-2 text-xs font-mono text-gray-400 dark:text-gray-600">
+              login@harry.dev
+            </span>
+          </div>
+
+          <h1 className="text-xl font-mono font-bold text-center mb-2 text-gray-900 dark:text-white">
+            $ sudo login
           </h1>
-          <p className="text-gray-500 dark:text-gray-400 text-center mb-8">
-            Sign in to your account
+          <p className="text-gray-500 dark:text-gray-400 text-center mb-6 text-xs font-mono">
+            authenticate to access admin
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -54,9 +65,9 @@ export const LoginPage = () => {
             <div>
               <label
                 htmlFor="usernameOrEmail"
-                className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200"
+                className="block text-xs font-mono mb-2 text-gray-500 dark:text-gray-400"
               >
-                Username or Email
+                user:
               </label>
               <input
                 id="usernameOrEmail"
@@ -65,8 +76,8 @@ export const LoginPage = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, usernameOrEmail: e.target.value })
                 }
-                className="w-full px-4 py-2.5 border border-gray-200 dark:border-[#2f2f2f] rounded-lg bg-white dark:bg-[#1f1f1f] text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
-                placeholder="Enter username or email"
+                className="w-full px-4 py-3 border border-gray-200 dark:border-neutral-700 rounded-lg bg-gray-50 dark:bg-neutral-800 text-gray-900 dark:text-white font-mono placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                placeholder="username or email"
                 required
                 autoComplete="username"
               />
@@ -76,9 +87,9 @@ export const LoginPage = () => {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200"
+                className="block text-xs font-mono mb-2 text-gray-500 dark:text-gray-400"
               >
-                Password
+                password:
               </label>
               <div className="relative">
                 <input
@@ -88,18 +99,18 @@ export const LoginPage = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
-                  className="w-full px-4 py-2.5 pr-10 border border-gray-200 dark:border-[#2f2f2f] rounded-lg bg-white dark:bg-[#1f1f1f] text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
-                  placeholder="Enter password"
+                  className="w-full px-4 py-3 pr-10 border border-gray-200 dark:border-neutral-700 rounded-lg bg-gray-50 dark:bg-neutral-800 text-gray-900 dark:text-white font-mono placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                  placeholder="••••••••"
                   required
                   autoComplete="current-password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-600 hover:text-gray-600 dark:hover:text-gray-400"
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
-                  <Icon path={showPassword ? mdiEyeOff : mdiEye} size={0.9} />
+                  <Icon path={showPassword ? mdiEyeOff : mdiEye} size={0.8} />
                 </button>
               </div>
             </div>
@@ -108,34 +119,23 @@ export const LoginPage = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium flex items-center justify-center gap-2"
+              className="w-full py-3 bg-blue-600 dark:bg-blue-500 text-white rounded-lg font-mono font-bold hover:bg-blue-700 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
             >
               {isLoading && (
-                <Icon path={mdiLoading} size={0.9} className="animate-spin" />
+                <Icon path={mdiLoading} size={0.8} className="animate-spin" />
               )}
-              {isLoading ? 'Signing in...' : 'Sign In'}
+              {isLoading ? 'authenticating...' : '$ execute'}
             </button>
           </form>
-
-          {/* Register link */}
-          <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
-            Don't have an account?{' '}
-            <Link
-              to="/register"
-              className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
-            >
-              Sign up
-            </Link>
-          </p>
         </div>
 
         {/* Back to home */}
         <p className="text-center mt-6">
           <Link
             to="/"
-            className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+            className="text-xs font-mono text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
           >
-            Back to home
+            ← cd ~
           </Link>
         </p>
       </div>

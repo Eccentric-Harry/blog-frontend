@@ -13,6 +13,8 @@ import {
 import { BsTwitterX, BsGithub, BsLinkedin, BsMedium } from 'react-icons/bs'
 import profileImage from '../../assets/profile.jpg'
 import { VisitorCounter } from '../VisitorCounter'
+import { ServerStatus } from '../ServerStatus'
+import { UserStatus } from '../UserStatus'
 
 type NavItem = {
   label: string
@@ -21,11 +23,11 @@ type NavItem = {
 }
 
 const navItems: NavItem[] = [
-  { label: 'Home', path: '/', icon: HiOutlineHome },
-  { label: 'Categories', path: '/categories', icon: HiOutlineFolder },
-  { label: 'Tags', path: '/tags', icon: HiOutlineTag },
-  { label: 'Archives', path: '/archives', icon: HiOutlineArchiveBox },
-  { label: 'About', path: '/about', icon: HiOutlineInformationCircle },
+  { label: 'home', path: '/', icon: HiOutlineHome },
+  { label: 'categories', path: '/categories', icon: HiOutlineFolder },
+  { label: 'tags', path: '/tags', icon: HiOutlineTag },
+  { label: 'archives', path: '/archives', icon: HiOutlineArchiveBox },
+  { label: 'about', path: '/about', icon: HiOutlineInformationCircle },
 ]
 
 type SocialLink = {
@@ -35,26 +37,14 @@ type SocialLink = {
 }
 
 const socialLinks: SocialLink[] = [
-  {
-    label: 'X',
-    url: 'https://x.com/harrrybuilds',
-    icon: BsTwitterX,
-  },
+  { label: 'X', url: 'https://x.com/harrrybuilds', icon: BsTwitterX },
   {
     label: 'GitHub',
     url: 'https://github.com/Eccentric-Harry',
     icon: BsGithub,
   },
-  {
-    label: 'LinkedIn',
-    url: 'https://www.linkedin.com/',
-    icon: BsLinkedin,
-  },
-  {
-    label: 'Medium',
-    url: 'https://eccentricharry.medium.com',
-    icon: BsMedium,
-  },
+  { label: 'LinkedIn', url: 'https://www.linkedin.com/', icon: BsLinkedin },
+  { label: 'Medium', url: 'https://eccentricharry.medium.com', icon: BsMedium },
 ]
 
 type LeftSidebarProps = {
@@ -67,8 +57,8 @@ type LeftSidebarProps = {
 }
 
 export const LeftSidebar = ({
-  blogTitle = 'My Blog',
-  blogSubtitle = 'Personal blog',
+  blogTitle = 'harry',
+  blogSubtitle = 'developer',
   avatarUrl = profileImage,
   darkMode = false,
   onToggleDarkMode,
@@ -77,27 +67,34 @@ export const LeftSidebar = ({
   const location = useLocation()
 
   return (
-    <aside className="w-64 flex-shrink-0 hidden lg:flex flex-col h-screen sticky top-0 border-r border-gray-200 dark:border-[#2d2d2d] bg-gray-50 dark:bg-[#121212] p-6">
+    <aside className="w-64 flex-shrink-0 hidden lg:flex flex-col h-screen sticky top-0 border-r border-gray-200 dark:border-neutral-800 bg-white dark:bg-[#121212] p-5">
       {/* Avatar & Title */}
-      <div className="flex flex-col items-center mb-8">
-        <div className="w-24 h-24 rounded-full overflow-hidden mb-4 ring-4 ring-white dark:ring-[#1e1e1e] shadow-lg">
+      <div className="flex flex-col items-center mb-6">
+        <div className="w-20 h-20 rounded-xl overflow-hidden mb-3 ring-2 ring-blue-100 dark:ring-blue-900/50">
           <img
             src={avatarUrl}
             alt={blogTitle}
             className="w-full h-full object-cover"
           />
         </div>
-        <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100 text-center">
+        <h1 className="text-lg font-mono font-bold text-gray-900 dark:text-white text-center flex items-center gap-1">
+          <span className="text-gray-400 dark:text-gray-600">$</span>
           {blogTitle}
+          <span className="w-2 h-4 bg-blue-500 dark:bg-blue-400 animate-cursor" />
         </h1>
-        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+        <p className="text-xs font-mono text-gray-500 dark:text-gray-400 mt-1">
           {blogSubtitle}
         </p>
-        <VisitorCounter className="mt-3" />
+        <UserStatus className="mt-2" showLabel={true} />
       </div>
 
       {/* Navigation */}
       <nav className="flex-1">
+        <div className="mb-2">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-gray-400 dark:text-gray-600">
+            // navigation
+          </span>
+        </div>
         <ul className="space-y-1">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path
@@ -106,71 +103,98 @@ export const LeftSidebar = ({
               <li key={item.path}>
                 <Link
                   to={item.path}
-                  className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors ${
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg font-mono text-sm transition-colors ${
                     isActive
-                      ? 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 font-medium'
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#1e1e1e]'
+                      ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border-l-2 border-blue-500'
+                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-neutral-800'
                   }`}
                 >
-                  <IconComponent size={20} />
-                  <span>{item.label}</span>
+                  <IconComponent size={18} />
+                  <span>/{item.label}</span>
                 </Link>
               </li>
             )
           })}
         </ul>
-      </nav>
 
-      {/* Social Links */}
-      <div className="pt-6 border-t border-gray-200 dark:border-[#2d2d2d]">
         {/* Admin Write Button */}
         {isAdmin && (
-          <Link
-            to="/create"
-            className="flex items-center justify-center gap-2 w-full px-4 py-2.5 mb-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm"
-          >
-            <HiOutlinePencilSquare size={18} />
-            Write New Post
-          </Link>
+          <div className="mt-4">
+            <Link
+              to="/create"
+              className="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-blue-600 dark:bg-blue-500 text-white rounded-lg font-mono font-bold text-sm hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors"
+            >
+              <HiOutlinePencilSquare size={16} />$ write --new
+            </Link>
+          </div>
         )}
+      </nav>
 
-        <div className="flex items-center justify-center gap-2 flex-wrap">
+      {/* Actions */}
+      <div className="py-3 border-t border-gray-200 dark:border-neutral-800">
+        <div className="mb-2">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-gray-400 dark:text-gray-600">
+            // actions
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={onToggleDarkMode}
+          className="flex items-center gap-3 w-full px-3 py-2 rounded-lg font-mono text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+        >
+          {darkMode ? <HiOutlineSun size={18} /> : <HiOutlineMoon size={18} />}
+          <span>{darkMode ? 'light_mode' : 'dark_mode'}</span>
+        </button>
+      </div>
+
+      {/* Social Links */}
+      <div className="py-3 border-t border-gray-200 dark:border-neutral-800">
+        <div className="mb-2">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-gray-400 dark:text-gray-600">
+            // connect
+          </span>
+        </div>
+        <div className="flex items-center gap-2">
           {socialLinks.map((link) => {
             const IconComponent = link.icon
             return (
               <a
                 key={link.label}
                 href={link.url}
-                target={link.url.startsWith('http') ? '_blank' : undefined}
-                rel={
-                  link.url.startsWith('http')
-                    ? 'noopener noreferrer'
-                    : undefined
-                }
-                className="p-2.5 rounded-full bg-gray-100 dark:bg-[#1e1e1e] text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-[#2d2d2d] hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
-                title={link.label}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-lg text-gray-400 dark:text-gray-600 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+                aria-label={link.label}
               >
-                <IconComponent size={20} />
+                <IconComponent size={16} />
               </a>
             )
           })}
         </div>
+      </div>
 
-        {/* Dark Mode Toggle */}
-        {onToggleDarkMode && (
-          <button
-            type="button"
-            onClick={onToggleDarkMode}
-            className="flex items-center justify-center gap-2 w-full mt-4 px-4 py-2 text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-[#1e1e1e] transition-colors text-gray-600 dark:text-gray-400"
-          >
-            {darkMode ? (
-              <HiOutlineSun size={18} />
-            ) : (
-              <HiOutlineMoon size={18} />
-            )}
-            {darkMode ? 'Light Mode' : 'Dark Mode'}
-          </button>
-        )}
+      {/* System Status */}
+      <div className="pt-3 border-t border-gray-200 dark:border-neutral-800">
+        <div className="mb-2">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-gray-400 dark:text-gray-600">
+            // system
+          </span>
+        </div>
+        <div className="flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-gray-50 dark:bg-neutral-800/50">
+          <div className="flex items-center gap-3">
+            <ServerStatus showLabel={false} />
+            <span className="text-[10px] font-mono text-gray-500 dark:text-gray-400">
+              api
+            </span>
+          </div>
+          <div className="h-3 w-px bg-gray-200 dark:bg-neutral-700" />
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-mono text-gray-500 dark:text-gray-400">
+              visitors:
+            </span>
+            <VisitorCounter className="text-[10px] font-mono" />
+          </div>
+        </div>
       </div>
     </aside>
   )

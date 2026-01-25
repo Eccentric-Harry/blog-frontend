@@ -16,7 +16,7 @@ export const MainLayout = ({
   showRightSidebar = true,
 }: MainLayoutProps) => {
   const [, setSearchParams] = useSearchParams()
-  const { isAdmin } = useAuth()
+  const { user, isAdmin, logout } = useAuth()
   const [darkMode, setDarkMode] = useState(() => {
     const saved = localStorage.getItem('darkMode')
     return saved
@@ -40,28 +40,31 @@ export const MainLayout = ({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-[#121212] text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen bg-white dark:bg-[#0f0f0f] text-gray-900 dark:text-gray-100 transition-colors">
       {/* Mobile Navigation */}
       <MobileNav
-        blogTitle="Harry"
+        blogTitle="harry"
         darkMode={darkMode}
         onToggleDarkMode={toggleDarkMode}
         isAdmin={isAdmin}
+        onSearch={handleSearch}
+        user={user}
+        logout={logout}
       />
 
       {/* Desktop Layout */}
       <div className="flex">
         {/* Left Sidebar */}
         <LeftSidebar
-          blogTitle="Harry"
-          blogSubtitle="Personal blog"
+          blogTitle="harry"
+          blogSubtitle="developer"
           darkMode={darkMode}
           onToggleDarkMode={toggleDarkMode}
           isAdmin={isAdmin}
         />
 
         {/* Main Content */}
-        <main className="flex-1 min-w-0 px-4 py-8 lg:px-8 lg:py-10">
+        <main className="flex-1 min-w-0 px-4 py-6 lg:px-8 lg:py-10 lg:pt-10 pt-4">
           <div className="max-w-3xl mx-auto">{children}</div>
         </main>
 
