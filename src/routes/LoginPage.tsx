@@ -39,10 +39,12 @@ export const LoginPage = () => {
   }
 
   return (
-    <div className="min-h-[60vh] flex items-center justify-center">
+    <div className="min-h-[60vh] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-8">
-          <h1 className="text-2xl font-bold text-center mb-2">Welcome Back</h1>
+        <div className="bg-white dark:bg-[#151515] rounded-2xl shadow-lg border border-gray-100 dark:border-[#2a2a2a] p-8">
+          <h1 className="text-2xl font-bold text-center mb-2 text-gray-900 dark:text-gray-100">
+            Welcome Back
+          </h1>
           <p className="text-gray-500 dark:text-gray-400 text-center mb-8">
             Sign in to your account
           </p>
@@ -52,7 +54,7 @@ export const LoginPage = () => {
             <div>
               <label
                 htmlFor="usernameOrEmail"
-                className="block text-sm font-medium mb-2"
+                className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200"
               >
                 Username or Email
               </label>
@@ -63,7 +65,7 @@ export const LoginPage = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, usernameOrEmail: e.target.value })
                 }
-                className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+                className="w-full px-4 py-2.5 border border-gray-200 dark:border-[#2f2f2f] rounded-lg bg-white dark:bg-[#1f1f1f] text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
                 placeholder="Enter username or email"
                 required
                 autoComplete="username"
@@ -74,7 +76,7 @@ export const LoginPage = () => {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium mb-2"
+                className="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-200"
               >
                 Password
               </label>
@@ -86,7 +88,7 @@ export const LoginPage = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, password: e.target.value })
                   }
-                  className="w-full px-4 py-2.5 pr-10 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+                  className="w-full px-4 py-2.5 pr-10 border border-gray-200 dark:border-[#2f2f2f] rounded-lg bg-white dark:bg-[#1f1f1f] text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
                   placeholder="Enter password"
                   required
                   autoComplete="current-password"
@@ -94,7 +96,8 @@ export const LoginPage = () => {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   <Icon path={showPassword ? mdiEyeOff : mdiEye} size={0.9} />
                 </button>
@@ -119,7 +122,7 @@ export const LoginPage = () => {
             Don't have an account?{' '}
             <Link
               to="/register"
-              className="text-blue-600 hover:text-blue-700 dark:text-blue-400 font-medium"
+              className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
             >
               Sign up
             </Link>
@@ -132,7 +135,7 @@ export const LoginPage = () => {
             to="/"
             className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
           >
-            ← Back to home
+            Back to home
           </Link>
         </p>
       </div>
