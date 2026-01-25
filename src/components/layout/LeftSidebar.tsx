@@ -47,7 +47,7 @@ const socialLinks: SocialLink[] = [
   },
   {
     label: 'LinkedIn',
-    url: 'https://www.linkedin.com/in/h-harinadh/',
+    url: 'https://www.linkedin.com/',
     icon: BsLinkedin,
   },
   {
