@@ -8,7 +8,7 @@ import { LoginPage } from './routes/LoginPage'
 import { CategoriesPage } from './routes/CategoriesPage'
 import { TagsPage } from './routes/TagsPage'
 import { ArchivesPage } from './routes/ArchivesPage'
-import { MainLayout } from './components/layout/MainLayout'
+import { MainLayout } from './components/layout'
 import { AuthProvider, useAuth } from './contexts/AuthContext'
 
 const queryClient = new QueryClient({
@@ -25,6 +25,7 @@ const queryClient = new QueryClient({
  */
 import { BsTwitterX, BsGithub, BsLinkedin, BsMedium } from 'react-icons/bs'
 import profileImage from './assets/profile.jpg'
+import * as React from 'react'
 
 const socialLinks = [
   {
